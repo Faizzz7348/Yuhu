@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 interface Route {
   id: string;
@@ -39,7 +39,6 @@ interface DataContextType {
   routes: Route[];
   machines: Machine[];
   refillHistory: RefillHistoryItem[];
-  isLoading: boolean;
   updateRoute: (id: string, name: string, description: string) => void;
   updateMachine: (id: string, location: string, frequency: "Daily" | "Weekday" | "Alt 1" | "Alt 2") => void;
   addRefillHistory: (item: RefillHistoryItem) => void;
@@ -106,24 +105,9 @@ const initialMachines: Machine[] = [
 ];
 
 export function DataProvider({ children }: { children: ReactNode }) {
-  const [routes, setRoutes] = useState<Route[]>([]);
-  const [machines, setMachines] = useState<Machine[]>([]);
+  const [routes, setRoutes] = useState<Route[]>(initialRoutes);
+  const [machines, setMachines] = useState<Machine[]>(initialMachines);
   const [refillHistory, setRefillHistory] = useState<RefillHistoryItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Simulate loading data
-  useEffect(() => {
-    const loadData = async () => {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      setRoutes(initialRoutes);
-      setMachines(initialMachines);
-      setIsLoading(false);
-    };
-
-    loadData();
-  }, []);
 
   const updateRoute = (id: string, name: string, description: string) => {
     setRoutes(prev =>
@@ -154,7 +138,6 @@ export function DataProvider({ children }: { children: ReactNode }) {
       routes, 
       machines, 
       refillHistory,
-      isLoading,
       updateRoute, 
       updateMachine,
       addRefillHistory,

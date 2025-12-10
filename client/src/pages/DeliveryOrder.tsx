@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Package, Plus, Minus, CheckCircle2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { ProductListSkeleton } from "@/components/LoadingSkeleton";
 
 // Product list - same as refill page
 const AVAILABLE_PRODUCTS = [
@@ -39,19 +38,7 @@ export default function DeliveryOrder() {
   const [machineName, setMachineName] = useState("");
   const [productQuantities, setProductQuantities] = useState<Record<string, number>>({});
   const [notes, setNotes] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
-
-  // Auto-generate new order number on mount and simulate loading
-  useEffect(() => {
-    setOrderNumber(`DO-${Date.now().toString().slice(-8)}`);
-    
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleQuantityChange = (productName: string, value: string) => {
     const qty = parseInt(value) || 0;
@@ -215,13 +202,10 @@ export default function DeliveryOrder() {
             </div>
           </CardHeader>
           <CardContent>
-            {isLoading ? (
-              <ProductListSkeleton />
-            ) : (
-              <div className="space-y-2 max-h-[400px] overflow-y-auto">
-                {AVAILABLE_PRODUCTS.map((product) => {
-                  const quantity = productQuantities[product] || 0;
-                  const isSelected = quantity > 0;
+            <div className="space-y-2 max-h-[400px] overflow-y-auto">
+              {AVAILABLE_PRODUCTS.map((product) => {
+                const quantity = productQuantities[product] || 0;
+                const isSelected = quantity > 0;
                   
                   return (
                     <div
@@ -273,16 +257,13 @@ export default function DeliveryOrder() {
                         >
                           <Plus className="w-3 h-3" />
                         </Button>
-                      </div>
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  </div>
+                );
+              })}
+            </div>
           </CardContent>
-        </Card>
-
-        {/* Order Summary - Only show if items selected */}
+        </Card>        {/* Order Summary - Only show if items selected */}
         {selectedProductCount > 0 && (
           <Card className="glass-card bg-primary/5">
             <CardHeader>

@@ -3,43 +3,10 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Truck, ChevronRight, Package } from "lucide-react";
 import { useData } from "@/contexts/DataContext";
-import { RouteCardSkeleton } from "@/components/LoadingSkeleton";
 
 export default function Home() {
   const [, setLocation] = useLocation();
-  const { routes, isLoading } = useData();
-
-  if (isLoading) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <div className="h-8 w-48 bg-muted animate-pulse rounded" />
-            <div className="h-4 w-64 bg-muted animate-pulse rounded" />
-          </div>
-          <Card className="glass-card">
-            <CardHeader>
-              <div className="flex items-start justify-between gap-2">
-                <div className="space-y-2 flex-1">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-muted animate-pulse rounded" />
-                    <div className="h-5 w-40 bg-muted animate-pulse rounded" />
-                  </div>
-                  <div className="h-4 w-56 bg-muted animate-pulse rounded" />
-                </div>
-                <div className="w-5 h-5 bg-muted animate-pulse rounded" />
-              </div>
-            </CardHeader>
-          </Card>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <RouteCardSkeleton />
-            <RouteCardSkeleton />
-            <RouteCardSkeleton />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const { routes } = useData();
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">

@@ -19,7 +19,6 @@ import RefillDialog from "@/components/RefillDialog";
 import type { Machine, Product } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { useData } from "@/contexts/DataContext";
-import { MachineCardSkeleton } from "@/components/LoadingSkeleton";
 
 // Mock reference data for auto-fill
 const mockReferenceData: Record<string, {
@@ -76,7 +75,7 @@ const mockProducts: Record<string, Product[]> = {
 export default function RouteManifest() {
   const { id } = useParams();
   const routeId = id || "ROUTE-001";
-  const { routes, machines: allMachines, addRefillHistory, isLoading } = useData();
+  const { routes, machines: allMachines, addRefillHistory } = useData();
   const route = routes.find((r) => r.id === routeId);
   const machines = allMachines.filter((m) => m.routeId === routeId);
   
@@ -571,15 +570,8 @@ export default function RouteManifest() {
             Machines to Refill
           </h2>
           
-          {isLoading ? (
-            <div className="space-y-3">
-              <MachineCardSkeleton />
-              <MachineCardSkeleton />
-              <MachineCardSkeleton />
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {machines.map((machine) => (
+          <div className="space-y-3">
+            {machines.map((machine) => (
               <Card
                 key={machine.id}
                 className={`glass-card transition-all duration-200 ${
@@ -633,11 +625,10 @@ export default function RouteManifest() {
                 </CardContent>
               </Card>
             ))}
-            </div>
-          )}
+          </div>
 
           {/* Submit Button */}
-          {!isLoading && machines.length > 0 && (
+          {machines.length > 0 && (
             <Card className="glass-card border-2 border-primary/20">
               <CardContent className="p-4">
                 <Button

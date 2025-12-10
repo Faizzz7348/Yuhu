@@ -14,6 +14,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import SettingsDialog from "@/components/SettingsDialog";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import { DataProvider, useData } from "@/contexts/DataContext";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import MachineSelector from "@/components/MachineSelector";
 import { Package2, Settings } from "lucide-react";
 import { useParams } from "wouter";
@@ -78,15 +79,17 @@ function AppContent() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <DataProvider>
-          <AppContent />
-          <PWAInstallPrompt />
-          <Toaster />
-        </DataProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <DataProvider>
+            <AppContent />
+            <PWAInstallPrompt />
+            <Toaster />
+          </DataProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
