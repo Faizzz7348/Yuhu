@@ -1,0 +1,6 @@
+<svg width="192" height="192" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" fill="#3b82f6"/>
+  <path d="M96 48L72 144h48L96 48z" fill="#ffffff"/>
+  <circle cx="96" cy="96" r="24" fill="#ffffff" opacity="0.3"/>
+  <text x="96" y="168" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" font-weight="bold">FM</text>
+</svg>
