@@ -1,25 +1,43 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Truck, ChevronRight, Package } from "lucide-react";
+import { MapPin, Truck, ChevronRight, Package, Loader2 } from "lucide-react";
 import { useData } from "@/contexts/DataContext";
 
 export default function Home() {
   const [, setLocation] = useLocation();
   const { routes } = useData();
+  const [navigating, setNavigating] = useState(false);
+
+  const handleNavigation = (path: string) => {
+    setNavigating(true);
+    setTimeout(() => {
+      setLocation(path);
+    }, 300);
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="space-y-6">
-        <div>
+      {navigating && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <p className="text-sm text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+      )}
+      
+      <div className="space-y-6 animate-in fade-in duration-500">
+        <div className="animate-in slide-in-from-bottom-4 duration-500">
           <h1 className="text-xl font-bold tracking-tight" data-testid="text-page-title">Delivery Routes</h1>
           <p className="text-xs text-muted-foreground mt-1">Select a route to start the refill manifest</p>
         </div>
 
         {/* Delivery Order Card */}
         <Card
-          className="hover-elevate cursor-pointer transform hover:scale-[1.02] glass-card group border-2 border-primary/30"
-          onClick={() => setLocation('/delivery-order')}
+          className="hover-elevate cursor-pointer transform hover:scale-[1.02] glass-card group border-2 border-primary/30 transition-all duration-300 animate-in slide-in-from-bottom-4 delay-100"
+          onClick={() => handleNavigation('/delivery-order')}
           data-testid="card-delivery-order"
         >
           <CardHeader>
@@ -39,11 +57,12 @@ export default function Home() {
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {routes.map((route) => (
+          {routes.map((route, index) => (
             <Card
               key={route.id}
-              className="hover-elevate cursor-pointer transform hover:scale-[1.02] glass-card group"
-              onClick={() => setLocation(`/route/${route.id}`)}
+              className="hover-elevate cursor-pointer transform hover:scale-[1.02] glass-card group transition-all duration-300 animate-in slide-in-from-bottom-4"
+              style={{ animationDelay: `${(index + 2) * 100}ms` }}
+              onClick={() => handleNavigation(`/route/${route.id}`)}
               data-testid={`card-route-${route.id}`}
             >
               <CardHeader>
